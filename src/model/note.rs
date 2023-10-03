@@ -84,7 +84,6 @@ impl NoteModelController {
             .unwrap_or_else(|| query_result.category.unwrap());
         let published = data
             .published
-            .clone()
             .unwrap_or_else(|| query_result.published.unwrap());
 
         let now = chrono::Utc::now();
@@ -93,12 +92,12 @@ impl NoteModelController {
         match sqlx::query_as::<_,NoteModel>(
             r#"UPDATE notes SET title = $1, content = $2, category = $3, published = $4, updated_at = $5 WHERE id = $6 RETURNING *"#
         )
-        .bind(&title)
-        .bind(&content)
-        .bind(&category)
-        .bind(&published)
-        .bind(&now)
-        .bind(&id)
+        .bind(title)
+        .bind(content)
+        .bind(category)
+        .bind(published)
+        .bind(now)
+        .bind(id)
         .fetch_one(mm.db())
         .await
         {

@@ -10,5 +10,4 @@ pub async fn new_db_pool() -> Result<Database, sqlx::Error> {
         .max_connections(max_connections)
         .connect(&database_url)
         .await
-        .map_err(|err| err)
 }

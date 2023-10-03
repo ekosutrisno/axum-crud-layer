@@ -60,14 +60,14 @@ pub async fn find_by_id_handler(
             let note_response = json!({"status": "success","data": json!({
                 "note": note
             })});
-            return Ok(Json(note_response));
+            Ok(Json(note_response))
         }
         Err(_) => {
             let error_response = json!({
                 "status": "fail",
                 "message": format!("Note with ID: {} not found", id)
             });
-            return Err((StatusCode::NOT_FOUND, Json(error_response)));
+            Err((StatusCode::NOT_FOUND, Json(error_response)))
         }
     }
 }
@@ -82,7 +82,7 @@ pub async fn create_handler(
                 "note": note
             })});
 
-            return Ok((StatusCode::CREATED, Json(note_response)));
+            Ok((StatusCode::CREATED, Json(note_response)))
         }
         Err(e) => {
             if e.to_string()
@@ -94,10 +94,10 @@ pub async fn create_handler(
                 });
                 return Err((StatusCode::CONFLICT, Json(error_response)));
             }
-            return Err((
+            Err((
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(json!({"status": "error","message": format!("{:?}", e)})),
-            ));
+            ))
         }
     }
 }
@@ -113,14 +113,12 @@ pub async fn update_handler(
                 "note": note
             })});
 
-            return Ok(Json(note_response));
+            Ok(Json(note_response))
         }
-        Err(_) => {
-            return Err((
-                StatusCode::NOT_FOUND,
-                Json(json!({"status": "error","message": format!("Note with ID: {} not found", id)})),
-            ));
-        }
+        Err(_) => Err((
+            StatusCode::NOT_FOUND,
+            Json(json!({"status": "error","message": format!("Note with ID: {} not found", id)})),
+        )),
     }
 }
 
